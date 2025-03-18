@@ -181,14 +181,23 @@ const Dashboard = () => {
 
   const handleDeleteFile = async (fileId) => {
     try {
-      await fileService.deleteFile(fileId);
-      setFiles(files.filter(file => file.id !== fileId));
-      showSnackbar('File deleted successfully', 'success');
+        const user = JSON.parse(localStorage.getItem('user'));
+        const fileToDelete = files.find(file => file.id === fileId);
+        
+        // Verificar si el usuario es el propietario o es admin
+        if (fileToDelete && (fileToDelete.uploaderId === user.id || user.role === 'ADMIN')) {
+            await fileService.deleteFile(fileId);
+            setFiles(files.filter(file => file.id !== fileId));
+            showSnackbar('Archivo eliminado exitosamente', 'success');
+        } else {
+            showSnackbar('No tienes permisos para eliminar este archivo', 'error');
+        }
     } catch (error) {
-      console.error('Error deleting file:', error);
-      showSnackbar('Failed to delete file', 'error');
+        console.error('Error deleting file:', error);
+        const errorMessage = error.message || 'Error al eliminar el archivo';
+        showSnackbar(errorMessage, 'error');
     } finally {
-      setDeleteDialog({ open: false, fileId: null, fileName: '' });
+        setDeleteDialog({ open: false, fileId: null, fileName: '' });
     }
   };
 
@@ -224,8 +233,29 @@ const Dashboard = () => {
   };
 
   const handleDownload = (fileId) => {
+    const token = localStorage.getItem('token');
     const downloadUrl = `${API_BASE_URL}/files/download/${fileId}`;
-    window.open(downloadUrl, '_blank');
+    // Abrir en una nueva pestaña con el token
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.target = '_blank';
+    // Agregar el token al header
+    fetch(downloadUrl, {
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+    .then(response => response.blob())
+    .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        link.href = url;
+        link.click();
+        window.URL.revokeObjectURL(url);
+    })
+    .catch(error => {
+        console.error('Error downloading file:', error);
+        showSnackbar('Error al descargar el archivo', 'error');
+    });
   };
 
   const showDeleteDialog = (fileId, fileName) => {
@@ -294,8 +324,35 @@ const Dashboard = () => {
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    // Limpiar localStorage
+    localStorage.clear();
+    
+    // Limpiar todos los estados
+    setUser(null);
+    setFiles([]);
+    setLoading(false);
+    setFileLoading(false);
+    setDeleteDialog({ open: false, fileId: null, fileName: '' });
+    setSnackbar({ open: false, message: '', severity: 'success' });
+    setFiltersOpen(false);
+    setFilters({
+        fileName: '',
+        username: '',
+        company: '',
+        fileType: '',
+        dateFrom: '',
+        dateTo: '',
+        minSize: '',
+        maxSize: '',
+        sortBy: 'date',
+        order: 'desc'
+    });
+    setContentTypes([]);
+    setVersionsDialog({ open: false, fileId: null, fileName: '' });
+    setFileVersions([]);
+    setVersionLoading(false);
+
+    // Redirigir al login
     window.location.href = '/login';
   };
 
@@ -370,7 +427,8 @@ const Dashboard = () => {
   };
 
   const getPreviewUrl = (fileId) => {
-    return `${API_BASE_URL}/files/download/${fileId}`;
+    const token = localStorage.getItem('token');
+    return `${API_BASE_URL}/files/download/${fileId}?token=${token}`;
   };
 
   if (loading) {
