@@ -1,0 +1,33 @@
+<svg width="500" height="400" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Nube principal -->
+  <path d="M340,180 C360,140 400,130 430,160 C450,120 510,120 520,170 C550,170 570,210 550,240 C570,260 560,300 530,310 C530,330 510,350 480,340 C460,370 410,380 380,350 C350,380 310,380 280,350 C250,370 210,360 200,330 C170,330 150,300 170,270 C150,250 160,210 190,200 C190,180 210,160 240,170 C260,130 310,130 340,180" fill="#F0F4F8" stroke="#0073BB" stroke-width="3" />
+  
+  <!-- Iconos de archivos -->
+  <g transform="translate(250, 200) scale(0.8)">
+    <!-- Carpeta -->
+    <rect x="-40" y="-30" width="80" height="60" rx="5" fill="#0073BB" />
+    <rect x="-50" y="-40" width="40" height="20" rx="5" fill="#0073BB" />
+    <rect x="-45" y="-35" width="90" height="55" rx="5" fill="#0073BB" opacity="0.8" />
+    
+    <!-- Documentos -->
+    <rect x="20" y="-50" width="40" height="50" rx="3" fill="white" stroke="#0073BB" stroke-width="2" />
+    <line x1="30" y1="-35" x2="50" y2="-35" stroke="#0073BB" stroke-width="2" />
+    <line x1="30" y1="-25" x2="50" y2="-25" stroke="#0073BB" stroke-width="2" />
+    <line x1="30" y1="-15" x2="45" y2="-15" stroke="#0073BB" stroke-width="2" />
+    
+    <rect x="-60" y="-70" width="40" height="50" rx="3" fill="white" stroke="#0073BB" stroke-width="2" transform="rotate(-10)" />
+    <line x1="-50" y1="-55" x2="-30" y2="-55" stroke="#0073BB" stroke-width="2" transform="rotate(-10)" />
+    <line x1="-50" y1="-45" x2="-30" y2="-45" stroke="#0073BB" stroke-width="2" transform="rotate(-10)" />
+    <line x1="-50" y1="-35" x2="-35" y2="-35" stroke="#0073BB" stroke-width="2" transform="rotate(-10)" />
+  </g>
+  
+  <!-- Líneas de conexión -->
+  <line x1="250" y1="270" x2="250" y2="310" stroke="#0073BB" stroke-width="2" stroke-dasharray="5,5" />
+  <line x1="230" y1="270" x2="210" y2="310" stroke="#0073BB" stroke-width="2" stroke-dasharray="5,5" />
+  <line x1="270" y1="270" x2="290" y2="310" stroke="#0073BB" stroke-width="2" stroke-dasharray="5,5" />
+  
+  <!-- Base - Dispositivo -->
+  <rect x="150" y="310" width="200" height="20" rx="5" fill="#0073BB" />
+  <rect x="180" y="330" width="140" height="40" rx="5" fill="#0073BB" />
+  <rect x="200" y="315" width="100" height="10" fill="#F0F4F8" />
+</svg> 
