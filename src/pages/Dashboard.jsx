@@ -181,17 +181,9 @@ const Dashboard = () => {
 
   const handleDeleteFile = async (fileId) => {
     try {
-        const user = JSON.parse(localStorage.getItem('user'));
-        const fileToDelete = files.find(file => file.id === fileId);
-        
-        // Verificar si el usuario es el propietario o es admin
-        if (fileToDelete && (fileToDelete.uploaderId === user.id || user.role === 'ADMIN')) {
-            await fileService.deleteFile(fileId);
-            setFiles(files.filter(file => file.id !== fileId));
-            showSnackbar('Archivo eliminado exitosamente', 'success');
-        } else {
-            showSnackbar('No tienes permisos para eliminar este archivo', 'error');
-        }
+        await fileService.deleteFile(fileId);
+        setFiles(files.filter(file => file.id !== fileId));
+        showSnackbar('Archivo eliminado exitosamente', 'success');
     } catch (error) {
         console.error('Error deleting file:', error);
         const errorMessage = error.message || 'Error al eliminar el archivo';

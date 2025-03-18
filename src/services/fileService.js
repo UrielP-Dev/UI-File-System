@@ -3,7 +3,7 @@ import { API_BASE_URL, fetchConfig, checkResponse, handleApiError } from './api.
 const getAuthToken = () => {
     const token = localStorage.getItem('token');
     if (!token) {
-        throw new Error('No authentication token found');
+        throw new Error('No se encontró el token de autenticación');
     }
     return token;
 };
@@ -71,26 +71,25 @@ export const fileService = {
     deleteFile: async (fileId) => {
         try {
             const token = getAuthToken();
-            console.log('Token being used:', token); // Para debugging
-
             const response = await fetch(`${API_BASE_URL}/files/${fileId}`, {
-                ...fetchConfig,
                 method: 'DELETE',
                 headers: {
-                    ...fetchConfig.headers,
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
 
-            if (response.status === 403) {
+            if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.message || 'No tienes permisos para eliminar este archivo');
             }
 
-            return await checkResponse(response);
+            return await response.json();
         } catch (error) {
             console.error('Delete file error details:', error);
+            if (error.message.includes('token')) {
+                throw new Error('Sesión expirada. Por favor, inicia sesión nuevamente.');
+            }
             throw error;
         }
     }
