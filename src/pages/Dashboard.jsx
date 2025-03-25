@@ -46,7 +46,8 @@ import {
   ExpandMore as ExpandMoreIcon,
   ExpandLess as ExpandLessIcon,
   SortByAlpha as SortIcon,
-  History as HistoryIcon
+  History as HistoryIcon,
+  ContentCopy as ContentCopyIcon // Import the ContentCopy icon
 } from '@mui/icons-material';
 import { format } from 'date-fns';
 import authService from '../services/authService';
@@ -248,6 +249,17 @@ const Dashboard = () => {
         console.error('Error downloading file:', error);
         showSnackbar('Error al descargar el archivo', 'error');
     });
+  };
+
+  const handleCopyUrl = (url) => {
+    navigator.clipboard.writeText(url)
+      .then(() => {
+        showSnackbar('Download URL copied to clipboard', 'success');
+      })
+      .catch((error) => {
+        console.error('Error copying URL:', error);
+        showSnackbar('Failed to copy URL', 'error');
+      });
   };
 
   const showDeleteDialog = (fileId, fileName) => {
@@ -812,6 +824,15 @@ const Dashboard = () => {
                             <DownloadIcon fontSize="small" />
                           </IconButton>
                         </Tooltip>
+                        <Tooltip title="Copiar URL de descarga">
+                          <IconButton 
+                            size="small" 
+                            onClick={() => handleCopyUrl(file.downloadUrl)}
+                            sx={{ color: '#0073bb' }}
+                          >
+                            <ContentCopyIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
                         <Tooltip title="Eliminar">
                           <IconButton 
                             size="small" 
@@ -998,4 +1019,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard; 
+export default Dashboard;

@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 import { AuthProvider } from './context/AuthContext';
@@ -7,6 +8,7 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
 import Dashboard from './pages/Dashboard';
+import NotFoundPage from './pages/NotFoundPage';
 
 // Tema personalizado con colores azul y blanco
 const theme = createTheme({
@@ -36,7 +38,7 @@ const theme = createTheme({
   },
 });
 
-function App() {
+const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -44,7 +46,7 @@ function App() {
         <AuthProvider>
           <Routes>
             {/* Ruta principal redirige al Dashboard si está autenticado, o al Login si no lo está */}
-            <Route path="/" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/" element={<Dashboard />} />
             
             {/* Rutas de autenticación */}
             <Route path="/login" element={<LoginPage />} />
@@ -61,12 +63,12 @@ function App() {
             />
             
             {/* Ruta para cualquier otra URL no definida */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </AuthProvider>
       </Router>
     </ThemeProvider>
   );
-}
+};
 
 export default App;
