@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider, AuthContext } from './context/AuthContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 
 // Páginas
@@ -39,6 +39,8 @@ const theme = createTheme({
 });
 
 const App = () => {
+  const { isAuthenticated } = useContext(AuthContext);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -46,7 +48,7 @@ const App = () => {
         <AuthProvider>
           <Routes>
             {/* Ruta principal redirige al Dashboard si está autenticado, o al Login si no lo está */}
-            <Route path="/" element={<Dashboard />} />
+            <Route path="/" element={isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />} />
             
             {/* Rutas de autenticación */}
             <Route path="/login" element={<LoginPage />} />
