@@ -45,8 +45,8 @@ const App = () => {
       <Router>
         <AuthProvider>
           <Routes>
-            {/* Ruta principal redirige al Dashboard si está autenticado, o al Login si no lo está */}
-            <Route path="/" element={<Dashboard />} />
+            {/* Ruta principal redirige al Login */}
+            <Route path="/" element={<Navigate to="/login" />} />
             
             {/* Rutas de autenticación */}
             <Route path="/login" element={<LoginPage />} />
