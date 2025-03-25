@@ -15,4 +15,7 @@ export default defineConfig({
       target: 'esnext',  // Usar un objetivo más moderno puede reducir el tamaño
     },
   },
+  server: {
+    historyApiFallback: true, // Agregar esta línea para manejar rutas en el servidor de desarrollo
+  },
 });

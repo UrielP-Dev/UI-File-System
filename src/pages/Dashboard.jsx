@@ -100,56 +100,56 @@ const Dashboard = () => {
     }
   };
 
-  const fetchFiles = async () => {
-    try {
-      setFileLoading(true);
-      const token = localStorage.getItem('token');
-      
-      // Build query string from filters
-      const queryParams = new URLSearchParams();
-      
-      if (filters.fileName) queryParams.append('fileName', filters.fileName);
-      if (filters.username) queryParams.append('username', filters.username);
-      if (filters.company) queryParams.append('company', filters.company);
-      if (filters.fileType) queryParams.append('fileType', filters.fileType);
-      if (filters.dateFrom) queryParams.append('dateFrom', filters.dateFrom);
-      if (filters.dateTo) queryParams.append('dateTo', filters.dateTo);
-      if (filters.minSize) queryParams.append('minSize', filters.minSize);
-      if (filters.maxSize) queryParams.append('maxSize', filters.maxSize);
-      if (filters.sortBy) queryParams.append('sortBy', filters.sortBy);
-      if (filters.order) queryParams.append('order', filters.order);
-      
-      const queryString = queryParams.toString();
-      const url = `${API_BASE_URL}/files${queryString ? `?${queryString}` : ''}`;
-      
-      const response = await fetch(url, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch files');
+ const fetchFiles = async () => {
+  try {
+    setFileLoading(true);
+    const token = localStorage.getItem('token');
+    
+    // Build query string from filters
+    const queryParams = new URLSearchParams();
+    
+    if (filters.fileName) queryParams.append('fileName', filters.fileName);
+    if (filters.username) queryParams.append('username', filters.username);
+    if (filters.company) queryParams.append('company', filters.company);
+    if (filters.fileType) queryParams.append('fileType', filters.fileType);
+    if (filters.dateFrom) queryParams.append('dateFrom', filters.dateFrom);
+    if (filters.dateTo) queryParams.append('dateTo', filters.dateTo);
+    if (filters.minSize) queryParams.append('minSize', filters.minSize);
+    if (filters.maxSize) queryParams.append('maxSize', filters.maxSize);
+    if (filters.sortBy) queryParams.append('sortBy', filters.sortBy);
+    if (filters.order) queryParams.append('order', filters.order);
+    
+    const queryString = queryParams.toString();
+    const url = `${API_BASE_URL}/files${queryString ? `?${queryString}` : ''}`;
+    
+    const response = await fetch(url, {
+      headers: {
+        'Authorization': `Bearer ${token}`
       }
+    });
 
-      const filesData = await response.json();
-      setFiles(filesData.data || []);
-      
-      // Extract unique content types for filter dropdown
-      if (filesData.data && filesData.data.length > 0) {
-        const types = [...new Set(filesData.data.map(file => file.contentType))];
-        setContentTypes(types);
-      }
-      
-      setLoading(false);
-      setFileLoading(false);
-    } catch (error) {
-      console.error('Error fetching files:', error);
-      showSnackbar('Failed to load files', 'error');
-      setLoading(false);
-      setFileLoading(false);
+    if (!response.ok) {
+      throw new Error('Failed to fetch files');
     }
-  };
+
+    const filesData = await response.json();
+    setFiles(filesData.data || []);
+    
+    // Extract unique content types for filter dropdown
+    if (filesData.data && filesData.data.length > 0) {
+      const types = [...new Set(filesData.data.map(file => file.contentType))];
+      setContentTypes(types);
+    }
+    
+  } catch (error) {
+    console.error('Error fetching files:', error);
+    setFiles(null); // Establecemos files como null en caso de error
+    showSnackbar('No pudimos cargar los archivos 😢', 'error');
+  } finally {
+    setLoading(false);
+    setFileLoading(false);
+  }
+};
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
